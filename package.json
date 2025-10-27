@@ -1,10 +1,11 @@
 {
   "name": "crud-nodejs-rocketseat",
+  "type": "module",
   "version": "1.0.0",
   "description": "Desafio do modulo de fundamentos de nodejs, criando uma API para realizar o gereciamento completo de tarefas (CRUD)",
   "main": "index.js",
   "scripts": {
-    "test": "node --watch src/server.js"
+    "dev": "node --watch src/server.js"
   },
   "keywords": [],
   "author": "",
