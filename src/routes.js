@@ -81,9 +81,29 @@ export const routes = [
                 return res.writeHead(400).end(JSON.stringify({ error: "nenhum dos campos foram preenchidos!"}))
             }
 
-            database.update('tasks', id,{ ...updateFields, updated_at: new Date().toISOString()})
+            try{
+                database.update('tasks', id,{ ...updateFields, updated_at: new Date().toISOString()})
+                
+                return res.writeHead(204).end()
+            } catch (erro) {
+                return res.writeHead(404).end(JSON.stringify({error: erro.message}))
+            }
+        }
+    },
+    {
+        method: 'DELETE',
+        path: buildRoutePath('/tasks/:id'),
+        handler: (req, res) => {
+
+            const id = req.params.id
             
-            return res.writeHead(204).end()
+            try{ 
+                database.delete('tasks', id)
+                
+                return res.writeHead(204).end()
+            } catch (erro) {
+                return res.writeHead(404).end(JSON.stringify({error: erro.message}))
+            }
         }
     },
 ]
