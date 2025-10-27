@@ -5,6 +5,16 @@ import { randomUUID } from 'node:crypto';
 const database = new Database()
 
 export const routes = [
+        {
+        method: 'GET',
+        path: buildRoutePath('/tasks'),
+        handler: (req, res) => {
+
+            const tasks = database.select('tasks')
+
+            return res.end(JSON.stringify(tasks))
+        }
+    },
     {
         method: 'POST',
         path: buildRoutePath('/tasks'),
@@ -20,7 +30,6 @@ export const routes = [
                 updated_at: new Date().toISOString(),
             }
 
-            console.log(task)
             database.insert('tasks', task)
             return res.writeHead(201).end()
         }
