@@ -25,10 +25,32 @@ export const routes = [
         handler: (req, res) => {
             const { title, description } = req.body
 
+            // validando se os campos de title e/ou description estão presentes
+
+            const updateFields = {}
+
+            if (title !== undefined) {
+                updateFields.title = title 
+            } else {
+                return res.writeHead(400).end(JSON.stringify({ error: "titulo é um campo obrigatorio!"}))
+
+            }
+
+            if (description !== undefined) {
+                updateFields.description = description 
+            } else {
+                updateFields.description = null
+            }
+            
+
+            // se estiver vazio os dois retornar mensagem de erro
+            if (Object.keys(updateFields).length ===0 ){
+                return res.writeHead(400).end(JSON.stringify({ error: "nenhum dos campos foram preenchidos!"}))
+            }
+
             const task = {
                 id: randomUUID(),
-                title, 
-                description, 
+                ... updateFields, 
                 completed_at: null,
                 created_at: new Date().toISOString(), 
                 updated_at: new Date().toISOString(),
