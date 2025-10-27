@@ -77,13 +77,36 @@ export const routes = [
             if (description !== undefined) updateFields.description = description
 
             // se estiver vazio os dois retornar mensagem de erro
-            if (Object.keys(updateFields).length ===0 ){
+            if (Object.keys(updateFields).length === 0 ){
                 return res.writeHead(400).end(JSON.stringify({ error: "nenhum dos campos foram preenchidos!"}))
             }
 
             try{
                 database.update('tasks', id,{ ...updateFields, updated_at: new Date().toISOString()})
                 
+                return res.writeHead(204).end()
+            } catch (erro) {
+                return res.writeHead(404).end(JSON.stringify({error: erro.message}))
+            }
+        }
+    },
+    {
+        method: 'PATCH',
+        path: buildRoutePath('/tasks/:id/complete'),
+        handler: (req, res) => {
+
+            const id = req.params.id
+            
+            try{ 
+                const task = database.select('tasks').find(task => task.id === id)
+
+                const updatedTask = {
+                    completed_at: task.completed_at ? null : 'concluida',
+                    updated_at: new Date().toISOString(),
+                }
+
+                database.update('tasks', id, updatedTask)
+
                 return res.writeHead(204).end()
             } catch (erro) {
                 return res.writeHead(404).end(JSON.stringify({error: erro.message}))
